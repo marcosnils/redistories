@@ -27,8 +27,7 @@ public class ConsumerTest
     @org.junit.Test
     public void testConsumer() throws IOException {
         environmentVariables.set("REDIS_URL", "redis://localhost:6379");
-        System.out.println(System.getenv("REDIS_URL"));
-        Jedis j = new Jedis();
+        Jedis j = new Jedis(System.getenv("REDIS_URL"));
         final HttpExchange exchange = new HttpExchange() {
             final OutputStream os = new ByteArrayOutputStream();
             @Override
