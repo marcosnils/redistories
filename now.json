@@ -1,4 +1,5 @@
 {
+  "public": true,
   "regions": ["lhr1"],
   "builds": [
     {"src": "src/main/**/*.java", "use": "@matheuss/now-java"},
