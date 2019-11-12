@@ -1,0 +1,21 @@
+{
+  "builds": [
+    {"src": "src/main/**/*.java", "use": "@matheuss/now-java"},
+    {"src": "www/package.json", "use": "@now/next"}
+  ],
+  "build": {
+    "env": {
+      "REDIS_URL": "@redistories_redis_url"
+    }
+  },
+  "env": {
+    "REDIS_URL": "@redistories_redis_url"
+  },
+  "regions": ["lhr1"],
+  "alias": "redistories-api.now.sh",
+  "routes": [
+    {"src": "/api/Consumer.java", "dest": "/Consumer.java"},
+    {"src": "/api/Producer.java", "dest": "/Producer.java"},
+    {"src": "/(.*)", "dest": "/www/$1"}
+  ]
+}
