@@ -1,9 +1,6 @@
 package com.redisdays.redistories;
 
 import com.sun.net.httpserver.*;
-import junit.framework.Test;
-import junit.framework.TestCase;
-import junit.framework.TestSuite;
 import org.junit.Rule;
 import org.junit.contrib.java.lang.system.EnvironmentVariables;
 import redis.clients.jedis.Jedis;
@@ -125,7 +122,7 @@ public class ProducerTest
                 return null;
             }
         };
-        Producer.produceMessage(he);
+        Producer.handler(he);
         Map.Entry<String, StreamEntryID> query = new AbstractMap.SimpleEntry("stories", new StreamEntryID(System.currentTimeMillis() - 30000, 0));
         List<Map.Entry<String, List<StreamEntry>>> resp = j.xread(10, 1000, query);
         assertEquals(1, resp.size());

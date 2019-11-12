@@ -21,7 +21,7 @@ public class Consumer {
         j = new Jedis(System.getenv("REDIS_URL"));
     }
 
-    public static void fetchMessages(final HttpExchange exchange) throws IOException {
+    public static void handler(final HttpExchange exchange) throws IOException {
         Map.Entry<String, StreamEntryID> query = new AbstractMap.SimpleEntry("stories", new StreamEntryID(System.currentTimeMillis() - 30000, 0));
         List<Map.Entry<String, List<StreamEntry>>> resp = j.xread(10, 1000, query);
         List<String> response = new ArrayList<>();

@@ -18,7 +18,7 @@ public class Producer
         j = new Jedis(System.getenv("REDIS_URL"));
     }
 
-    public static void produceMessage(final HttpExchange exchange) throws IOException {
+    public static void handler(final HttpExchange exchange) throws IOException {
         ObjectMapper mapper = new ObjectMapper();
         Map<String, Object> jsonMap = mapper.readValue(exchange.getRequestBody(), Map.class);
         Map<String, String> params = new HashMap<>();

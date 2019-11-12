@@ -7,7 +7,6 @@ import com.sun.net.httpserver.HttpPrincipal;
 import org.junit.Rule;
 import org.junit.contrib.java.lang.system.EnvironmentVariables;
 import redis.clients.jedis.Jedis;
-import redis.clients.jedis.StreamEntry;
 import redis.clients.jedis.StreamEntryID;
 
 import java.io.ByteArrayOutputStream;
@@ -16,9 +15,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.InetSocketAddress;
 import java.net.URI;
-import java.util.AbstractMap;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import static org.junit.Assert.assertEquals;
@@ -124,7 +121,7 @@ public class ConsumerTest
         Map<String, String> params = new HashMap<>();
         params.put("message", "test");
         StreamEntryID resp = j.xadd("stories", null, params);
-        Consumer.fetchMessages(exchange);
+        Consumer.handler(exchange);
         assertEquals("[\"test\"]",new String(((ByteArrayOutputStream) exchange.getResponseBody()).toByteArray()));
     }
 }
