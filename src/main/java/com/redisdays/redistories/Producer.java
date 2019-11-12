@@ -1,34 +1,34 @@
 package com.redisdays.redistories;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.sun.net.httpserver.Headers;
-import com.sun.net.httpserver.HttpContext;
-import com.sun.net.httpserver.HttpExchange;
-import com.sun.net.httpserver.HttpPrincipal;
+import com.sun.net.httpserver.*;
 import redis.clients.jedis.Jedis;
-import redis.clients.jedis.StreamEntry;
 import redis.clients.jedis.StreamEntryID;
 
+import javax.net.ssl.SSLSession;
 import java.io.*;
 import java.net.InetSocketAddress;
 import java.net.URI;
-import java.util.AbstractMap;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
 import java.util.Map;
 
-public class Consumer {
 
+public class Producer
+{
     private static Jedis j;
 
     static {
         j = new Jedis(System.getenv("REDIS_URL"));
     }
 
-    public static void main(String[] args) throws IOException {
+    public static void main( String[] args ) throws IOException {
 
-        final HttpExchange exchange = new HttpExchange() {
-            final OutputStream os = new ByteArrayOutputStream();
+        HttpExchange he = new HttpsExchange() {
+            @Override
+            public SSLSession getSSLSession() {
+                return null;
+            }
+
             @Override
             public Headers getRequestHeaders() {
                 return null;
@@ -61,12 +61,12 @@ public class Consumer {
 
             @Override
             public InputStream getRequestBody() {
-                return null;
+                return new ByteArrayInputStream("{\"message\": \"Hello there!\"}".getBytes());
             }
 
             @Override
             public OutputStream getResponseBody() {
-                return os;
+                return null;
             }
 
             @Override
@@ -114,24 +114,14 @@ public class Consumer {
                 return null;
             }
         };
-        fetchMessages(exchange);
-        System.out.println(new String(((ByteArrayOutputStream) exchange.getResponseBody()).toByteArray()));
-
+        produceMessage(he);
     }
 
-    public static void fetchMessages(final HttpExchange exchange) throws IOException {
-        Map.Entry<String, StreamEntryID> e = new AbstractMap.SimpleEntry("stories", new StreamEntryID(System.currentTimeMillis() - 30000, 0));
-        List<Map.Entry<String, List<StreamEntry>>> resp = j.xread(10, 1000, e);
-        List<String> response = new ArrayList<>();
-        if (resp.size() > 0) {
-            for (StreamEntry se : resp.get(0).getValue()) {
-                response.add(se.getFields().get("message"));
-            }
-        }
-        OutputStream os = exchange.getResponseBody();
-        ObjectMapper Obj = new ObjectMapper();
-        os.write(Obj.writeValueAsString(response).getBytes());
-        os.close();
+    public static void produceMessage(final HttpExchange exchange) throws IOException {
+        ObjectMapper mapper = new ObjectMapper();
+        Map<String, Object> jsonMap = mapper.readValue(exchange.getRequestBody(), Map.class);
+        Map<String, String> params = new HashMap<>();
+        params.put("message", (String) jsonMap.get("message"));
+        StreamEntryID resp = j.xadd("stories", null, params);
     }
-
 }
