@@ -1,5 +1,3 @@
-package com.redisdays.redistories;
-
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sun.net.httpserver.HttpExchange;
 import redis.clients.jedis.Jedis;
