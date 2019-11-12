@@ -28,9 +28,11 @@ public class Consumer {
                 response.add(se.getFields().get("message"));
             }
         }
-        OutputStream os = exchange.getResponseBody();
         ObjectMapper Obj = new ObjectMapper();
-        os.write(Obj.writeValueAsString(response).getBytes());
+        byte[] bytes = Obj.writeValueAsString(response).getBytes();
+        exchange.sendResponseHeaders(200, bytes.length);
+        OutputStream os = exchange.getResponseBody();
+        os.write(bytes);
         os.close();
     }
 

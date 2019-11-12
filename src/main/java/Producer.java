@@ -22,5 +22,6 @@ public class Producer
         Map<String, String> params = new HashMap<>();
         params.put("message", (String) jsonMap.get("message"));
         StreamEntryID resp = j.xadd("stories", null, params);
+        exchange.sendResponseHeaders(200, resp.toString().getBytes().length);
     }
 }
