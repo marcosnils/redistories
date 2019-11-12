@@ -2,6 +2,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sun.net.httpserver.HttpExchange;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.StreamEntryID;
+import java.io.OutputStream;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -21,7 +22,14 @@ public class Producer
         Map<String, Object> jsonMap = mapper.readValue(exchange.getRequestBody(), Map.class);
         Map<String, String> params = new HashMap<>();
         params.put("message", (String) jsonMap.get("message"));
+
         StreamEntryID resp = j.xadd("stories", null, params);
-        exchange.sendResponseHeaders(200, resp.toString().getBytes().length);
+        byte[] respBytes = resp.toString().getBytes();
+
+        exchange.sendResponseHeaders(200, respBytes.length);
+        OutputStream os = exchange.getResponseBody();
+        os.write(respBytes);
+
+        os.close();
     }
 }
