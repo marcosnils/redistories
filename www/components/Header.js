@@ -10,7 +10,7 @@ export default function Header() {
       <Link href="/">
         <a style={linkStyle}>Home</a>
       </Link>
-      <Link href="/message">
+      <Link href="/create">
         <a style={linkStyle}>Post story</a>
       </Link>
     </div>

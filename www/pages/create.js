@@ -1,5 +1,6 @@
 import Layout from '../components/MyLayout.js'
 import React, { Component } from 'react'
+import Router from 'next/router'
 
 export default class extends Component {
     constructor() {
@@ -9,7 +10,7 @@ export default class extends Component {
       };
     }
     handleChange = evt => {
-    // This triggers everytime the input is changed
+        // This triggers everytime the input is changed
         this.setState({
            value: evt.target.value,
         });
@@ -26,6 +27,8 @@ export default class extends Component {
         body: JSON.stringify({"message": this.state.value})
       }).then((res) => {
         res.status === 200 ? this.setState({ submitted: true }) : ''
+        Router.push('/')
+
       })
     }
 

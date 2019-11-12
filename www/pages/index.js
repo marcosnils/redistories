@@ -25,19 +25,10 @@ constructor() {
       )
   }
 
-  componentDidMount() {
-  //const res = await fetch('/api/latest');
-  //const data = await res.json();
-  console.log('Mounted');
-  const data = {messages: ['1', '2', '3', '4']};
-  this.setState({...this.state, messages: data.messages});
-
-  //return {
-    //messages: data.messages
-  //};
-
+  async componentDidMount() {
+  const res = await fetch('/api/stories');
+  const messages = await res.json();
+  this.setState({...this.state, messages});
   }
-
-
 }
 
