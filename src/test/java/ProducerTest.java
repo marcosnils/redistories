@@ -121,7 +121,7 @@ public class ProducerTest
         };
         Producer.handler(he);
         Map.Entry<String, StreamEntryID> query = new AbstractMap.SimpleEntry("stories", new StreamEntryID(System.currentTimeMillis() - 30000, 0));
-        List<Map.Entry<String, List<StreamEntry>>> resp = j.xread(10, 1000, query);
+        List<Map.Entry<String, List<StreamEntry>>> resp = j.xread(10, 0, query);
         assertEquals(1, resp.size());
     }
 }

@@ -21,7 +21,7 @@ public class Consumer {
 
     public static void handler(final HttpExchange exchange) throws IOException {
         Map.Entry<String, StreamEntryID> query = new AbstractMap.SimpleEntry("stories", new StreamEntryID(System.currentTimeMillis() - 30000, 0));
-        List<Map.Entry<String, List<StreamEntry>>> resp = j.xread(10, 1000, query);
+        List<Map.Entry<String, List<StreamEntry>>> resp = j.xread(10, 0, query);
         List<String> response = new ArrayList<>();
         if (resp.size() > 0) {
             for (StreamEntry se : resp.get(0).getValue()) {
